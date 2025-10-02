@@ -44,6 +44,13 @@ public class User {
 	
 	public User() {}
 	
+	public User(String email, String userName, String password) { // constructor for insert methods
+		super();
+		this.email = email;
+		this.userName = userName;
+		this.password = password;
+	}
+	
 	public User(long id, String email, String userName, String password) {
 		super();
 		this.id = id;

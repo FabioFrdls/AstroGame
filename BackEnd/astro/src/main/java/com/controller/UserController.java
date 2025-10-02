@@ -15,7 +15,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 	
 	@Autowired
@@ -26,9 +26,9 @@ public class UserController {
 	}
 
 	
-	@PostMapping("/register")
-	public ResponseEntity<User> register(@RequestBody @Valid User user) {
-		User response = userService.register(user);
+	@PostMapping("/signup")
+	public ResponseEntity<User> signUp(@RequestBody User user) {
+		User response = userService.signUp(user);
 		return ResponseEntity.ok(response);
 	}
 }
