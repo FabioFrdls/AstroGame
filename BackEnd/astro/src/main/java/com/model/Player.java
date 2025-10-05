@@ -18,6 +18,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="Player")
@@ -26,15 +28,16 @@ public class Player {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	/*
-	@OneToOne
-    @JoinColumn(name = "user_id", unique = true)
-	private int userId;
-	*/
+	 
 	@OneToOne
 	@JoinColumn(name = "ship_id")
 	@JsonIgnore
 	private Ship ship;
+	
+	@NotBlank
+	@Size(min  = 3, max = 20, message = "The name length must be between 3 and 20")
+	@Column(name = "name_")
+	private String name;
 	
 	@OneToOne(mappedBy = "player")
 	@JsonIgnore
@@ -97,9 +100,12 @@ public class Player {
 		return position;
 	}
 	
-	public void setPosition(double x, double y, double z) {
-		this.position.x = x;
-		this.position.y = y;
-		this.position.z = z;
+	public void setPosition(Vector position) {
+		this.position = position;
+	}
+	
+	public void moveTo(Vector destination) {
+		this.fuel = -(this.position.distance(destination)) / 100;
+		this.position = destination;
 	}
 }
