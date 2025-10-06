@@ -3,8 +3,10 @@ package com.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,7 +17,6 @@ import com.dto.UserDto;
 import com.model.User;
 import com.service.UserService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -29,6 +30,7 @@ public class UserController {
 		this.userService = userService;
 	}
 
+	// Post methods
 	
 	@PostMapping("/signup")
 	public ResponseEntity<User> signUp(@RequestBody User user) {
@@ -43,8 +45,20 @@ public class UserController {
 	}
 	
 	@PostMapping("/logout")
-	public ResponseEntity<String> logout(@RequestHeader(name = "access-token", required = true) String token) {
-		String response = userService.logout(token);
-		return ResponseEntity.ok(response);
+	public ResponseEntity<Void> logout(@RequestHeader(name = "token", required = true) String token) {
+		userService.logout(token);
+		return ResponseEntity.ok().build();
+	}
+	
+	
+	// Get methods
+	
+	@GetMapping("/getCurrentToken")
+	public ResponseEntity<UserDto> token(@RequestHeader(name = "token") String token) {
+	    User user = userService.getUserByToken(token);
+	    if (user == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	    }
+	    return ResponseEntity.ok(new UserDto(user.getUserName()));
 	}
 }

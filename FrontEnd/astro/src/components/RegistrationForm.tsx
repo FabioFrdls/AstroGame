@@ -1,11 +1,5 @@
 import { useState } from "react";
-
-interface User {
-    id: BigInteger;
-    email: string;
-    userName: string;
-    password: string;
-}
+import { useAuth } from "../context/AuthContext";
 
 
 interface RegistrationFormProps {
@@ -14,19 +8,9 @@ interface RegistrationFormProps {
 
 function RegistrationForm({ onCancel }: RegistrationFormProps) {
 
-    const fields = ["email", "userName", "password", "repeatPassword"]; // array to map in input fields
+    const { signup } = useAuth();
 
-    interface Data {         // data to send to backend
-        email: string;
-        userName: string;
-        password: string;
-    }
-
-    interface RegistrationData extends Data {    // extension for psw check before the fetch
-        repeatPassword: string;
-    }
-
-    const [formData, setFormData] = useState<RegistrationData>({
+    const [formData, setFormData] = useState({
         email: "",
         userName: "",
         password: "",
@@ -45,33 +29,12 @@ function RegistrationForm({ onCancel }: RegistrationFormProps) {
             alert("The passwords don't match");
             return;
         }
-        const { email, userName, password } = formData;
-        const userData: Data = { email, userName, password };   // intance of Data
-        console.log("Dati pronti per la fetch:", userData);
-
-        try {
-            const response = await fetch("http://localhost:8080/user/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userData),
-            });
-
-            if (!response.ok) {
-                throw new Error("Net error");
-            }
-
-            const user: User = await response.json();
-            console.log("Response:", user);
-
-            if (user) {
-                alert("Registration completed");
-                onCancel();
-            } else {
-                alert("Error: ");
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Impossible to contact the server");
+        const success = await signup(formData.email, formData.userName, formData.password);
+        if (success) {
+            alert("Signup completed!");
+            onCancel();
+        } else {
+            alert("Signup failed...");
         }
     };
 
@@ -79,7 +42,7 @@ function RegistrationForm({ onCancel }: RegistrationFormProps) {
 
     return <div>
         <form onSubmit={handleSubmit}>
-            {fields.map(field => (
+            {["email", "userName", "password", "repeatPassword"].map(field => (
                 <div key={field}>
                     <label>{field}</label>
                     <input

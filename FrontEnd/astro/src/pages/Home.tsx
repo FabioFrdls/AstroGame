@@ -1,28 +1,16 @@
 import RegistrationForm from "../components/RegistrationForm";
 import LoginForm from "../components/LoginForm";
-import LogOut from "../components/LogOut";
+import Game from "./Game";
 import { useState } from 'react';
-import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+
 
 function Home() {
     const [showRegForm, setShowRegForm] = useState(false);
 
     const [showLogForm, setShowLogForm] = useState(false);
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-
-    const handleLogout = () => {    // logOut function
-        LogOut();
-        setIsLoggedIn(false);
-    };
+    const { isLoggedIn, logout } = useAuth();
 
 
     return <>
@@ -30,7 +18,11 @@ function Home() {
         <h2>Welcome to AstroGame!</h2>
         <div>
             {isLoggedIn ? (
-                <button onClick={handleLogout}>Log out</button>
+                <>
+                    <button onClick={logout}>Log out</button>
+                    <button onClick={Game}>Play</button>
+                </>
+
             ) : (
                 <>
                     <button onClick={() => setShowRegForm(true)}>Sign up</button>

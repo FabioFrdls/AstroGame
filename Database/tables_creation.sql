@@ -23,7 +23,16 @@ CREATE TABLE user_(
 	id BIGINT not null AUTO_INCREMENT PRIMARY KEY,
 	player_id BIGINT,
 	email VARCHAR(50),
-	username VARCHAR(50),
+	user_name VARCHAR(50),
 	password_ VARCHAR(50),
 	FOREIGN KEY(player_id) REFERENCES player(id) 
+	
+);
+
+CREATE TABLE session_(
+	id BIGINT not null AUTO_INCREMENT PRIMARY KEY,
+	user_id BIGINT,
+	token VARCHAR(50),
+	FOREIGN KEY(user_id) REFERENCES user_(id) 
+
 );

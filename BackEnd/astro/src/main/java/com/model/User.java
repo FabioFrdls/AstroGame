@@ -34,7 +34,7 @@ public class User {
 	
 	@NotBlank
 	@Size(min  = 3, max = 20, message = "The name length must be between 3 and 20")
-	@Column(name = "username")
+	@Column(name = "user_name")
 	private String userName;
 	
 	@NotBlank
