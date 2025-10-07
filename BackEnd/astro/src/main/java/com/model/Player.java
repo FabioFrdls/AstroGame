@@ -64,6 +64,15 @@ public class Player {
 	
 	public Player() {}
 	
+	public Player(Ship ship, User user, String name) {
+		super();
+		this.ship = ship;
+		this.user = user;
+		this.name = name;
+		this.fuel = ship.getMaxFuel();
+		this.position = new Vector(0, 0, 0);
+	}
+	
 	public Player(long id, Ship ship, double fuel, Vector position) {
 		super();
 		this.id = id;
@@ -88,6 +97,14 @@ public class Player {
 		this.ship = ship;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public double getFuel() {
 		return fuel;
 	}

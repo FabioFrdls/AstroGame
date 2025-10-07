@@ -3,15 +3,13 @@ import LoginForm from "../components/LoginForm";
 import Game from "./Game";
 import { useState } from 'react';
 import { useAuth } from "../context/AuthContext";
-
+import { ServiceProvider } from '../services/Service.tsx'
 
 function Home() {
     const [showRegForm, setShowRegForm] = useState(false);
-
     const [showLogForm, setShowLogForm] = useState(false);
-
     const { isLoggedIn, logout } = useAuth();
-
+    const [showGame, setShowGame] = useState(false);
 
     return <>
 
@@ -19,8 +17,16 @@ function Home() {
         <div>
             {isLoggedIn ? (
                 <>
-                    <button onClick={logout}>Log out</button>
-                    <button onClick={Game}>Play</button>
+                    {showGame ? (<><ServiceProvider>
+                        <Game />
+                    </ServiceProvider>
+                        <button onClick={() => setShowGame(false)}>Exit</button></>) : (
+                        <>
+                            <button onClick={logout}>Log out</button>
+                            <button onClick={() => setShowGame(true)}>Play</button>
+                        </>
+                    )}
+
                 </>
 
             ) : (
