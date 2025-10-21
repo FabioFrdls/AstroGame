@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [username, setUsername] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
     const isLoggedIn = !!token;
+
     useEffect(() => {
         const savedToken = localStorage.getItem("token");
         const savedUsername = localStorage.getItem("username");

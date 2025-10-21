@@ -29,7 +29,7 @@ public class Player {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "ship_id")
 	@JsonIgnore
 	private Ship ship;
@@ -121,8 +121,16 @@ public class Player {
 		this.position = position;
 	}
 	
-	public void moveTo(Vector destination) {
-		this.fuel = -(this.position.distance(destination)) / 100;
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public boolean moveTo(Vector destination) {	// need boolean to communicate to the service
+		double fuel = (this.position.distance(destination)) / 100;
+		if(this.fuel < fuel)
+			return false;
+		this.fuel -= fuel;
 		this.position = destination;
+		return true;
 	}
 }

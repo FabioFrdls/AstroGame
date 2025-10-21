@@ -1,9 +1,10 @@
 import RegistrationForm from "../components/RegistrationForm";
 import LoginForm from "../components/LoginForm";
-import Game from "./Game";
+import GameScreen from "./Game";
 import { useState } from 'react';
 import { useAuth } from "../context/AuthContext";
-import { ServiceProvider } from '../services/Service.tsx'
+import { ServiceProvider } from '../services/GameService.tsx'
+import { GameContProvider } from "../context/GameContext.tsx";
 
 function Home() {
     const [showRegForm, setShowRegForm] = useState(false);
@@ -18,7 +19,9 @@ function Home() {
             {isLoggedIn ? (
                 <>
                     {showGame ? (<><ServiceProvider>
-                        <Game />
+                        <GameContProvider>
+                            <GameScreen />
+                        </GameContProvider>
                     </ServiceProvider>
                         <button onClick={() => setShowGame(false)}>Exit</button></>) : (
                         <>

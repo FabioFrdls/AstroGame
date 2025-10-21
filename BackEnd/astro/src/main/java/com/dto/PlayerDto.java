@@ -10,7 +10,6 @@ public class PlayerDto {
 	private long id;
 	private Ship ship;
 	private String name;
-	private User user;
 	private double fuel;
 	private Vector position;
 	
@@ -59,14 +58,7 @@ public class PlayerDto {
 		this.name = name;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+	
 	public double getFuel() {
 		return fuel;
 	}

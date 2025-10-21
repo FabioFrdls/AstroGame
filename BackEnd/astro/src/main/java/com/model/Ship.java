@@ -28,9 +28,9 @@ public class Ship {
 	private int maxEquip;
 	private int size;
 	
-	@OneToOne(mappedBy = "ship")
+	@OneToMany(mappedBy = "ship")
 	@JsonIgnore
-	private Player player;
+	private List<Player> players;
 	
 	public Ship() {}
 	

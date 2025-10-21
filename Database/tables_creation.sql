@@ -10,7 +10,7 @@ CREATE TABLE ship(
 
 CREATE TABLE player(
 	id BIGINT not null AUTO_INCREMENT PRIMARY KEY,
-	ship_id BIGINT,
+	ship_id BIGINT	UNIQUE,
 	name_ VARCHAR(50),
 	fuel DECIMAL(10,2),
 	x_axis DECIMAL(10,2),
@@ -21,7 +21,7 @@ CREATE TABLE player(
 
 CREATE TABLE user_(
 	id BIGINT not null AUTO_INCREMENT PRIMARY KEY,
-	player_id BIGINT,
+	player_id BIGINT	UNIQUE,
 	email VARCHAR(50),
 	user_name VARCHAR(50),
 	password_ VARCHAR(50),

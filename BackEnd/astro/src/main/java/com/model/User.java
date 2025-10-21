@@ -2,6 +2,7 @@ package com.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +23,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@OneToOne
+	@OneToOne( cascade = CascadeType.ALL)
 	@JoinColumn(name = "player_id")
 	@JsonIgnore
 	private Player player;
@@ -51,9 +52,10 @@ public class User {
 		this.password = password;
 	}
 	
-	public User(long id, String email, String userName, String password) {
+	public User(long id, Player player, String email, String userName, String password) {
 		super();
 		this.id = id;
+		this.player = player;
 		this.email = email;
 		this.userName = userName;
 		this.password = password;

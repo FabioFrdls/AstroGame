@@ -1,5 +1,6 @@
 package com.service;
 
+
 import org.springframework.stereotype.Service;
 
 import com.model.Session;
@@ -11,6 +12,7 @@ import com.repo.PlayerRepo;
 import com.repo.SessionRepo;
 import com.repo.ShipRepo;
 import com.repo.UserRepo;
+import com.utility.Pair;
 import com.utility.Vector;
 
 @Service
@@ -33,14 +35,16 @@ public class PlayerService {
 	public Long getPlayerIdFromToken(String token) { // takes the actual userId from the client
 		Session session = sessionRepo.findByToken(token).orElseThrow(
 				() -> new RuntimeException("Token not valid"));
-		return session.getUserId();
+		User user = userRepo.findById(session.getUserId()).get();	// player must be not null
+		return user.getPlayer().getId();
 	}
 	
 	// Post methods
-	public PlayerDto create(Long id, String name, Ship ship) {
-		User user = userRepo.findById(id).get();
+	public PlayerDto create(String name, Ship ship, User user) {
 		Player player = new Player(ship, user, name);
-		playerRepo.save(player);
+		player.setUser(user);
+		user.setPlayer(player);
+		userRepo.save(user);
 		return new PlayerDto(player);
 	}
 
@@ -55,10 +59,23 @@ public class PlayerService {
 		playerRepo.save(player);
 	}
 	
-	public PlayerDto moveTo(Long id, Vector destination) {
+	public Pair<PlayerDto, Boolean> moveTo(Long id, Vector destination) {
 		Player player = playerRepo.findById(id).get();
-		player.moveTo(destination);
-		playerRepo.save(player);
-		return new PlayerDto(player.getFuel(), player.getPosition());
+		System.out.println("Service: " + destination.toString());
+		boolean move = player.moveTo(destination);
+		System.out.println(player.getFuel() + " " + player.getPosition().toString());
+		if(move)
+			playerRepo.save(player);
+		return new Pair<>(new PlayerDto(player), move);
+	}
+	
+	// delete methods
+	
+	public PlayerDto delete(Long playerId, Long userId) {
+		Player player = playerRepo.findById(playerId).get();
+		User user = userRepo.findById(userId).get();
+		user.setPlayer(null);
+		playerRepo.delete(player);
+		return new PlayerDto(player);
 	}
 }
